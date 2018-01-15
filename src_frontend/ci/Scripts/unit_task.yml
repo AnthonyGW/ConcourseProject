@@ -13,8 +13,9 @@ outputs:
 - name: cpfrontend_test_result
 
 run:
-  path: cp_github_repo/src_frontend/ci/Scripts/test_script.sh
+  path: sh
   args:
   - -exc
     |
     chmod +x cp_github_repo/src_frontend/ci/Scripts/test_script.sh
+    cp_github_repo/src_frontend/ci/Scripts/test_script.sh
