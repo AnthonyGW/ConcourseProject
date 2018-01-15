@@ -9,7 +9,7 @@ sudo apt-get install -yv python-psycopg2
 sudo apt-get install -yv libpq-dev
 
 export APP_SETTINGS="testing"
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 
 python3 manage.py db init
 python3 manage.py db migrate
