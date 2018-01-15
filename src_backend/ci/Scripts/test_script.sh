@@ -11,7 +11,7 @@ service postgresql restart
 
 psql -U postgres -h localhost <<< "ALTER USER postgres with password 'postgres';CREATE DATABASE test_db;\q"
 
-cd cpbackend_github_repo
+cd cpbackend_github_repo/src_backend
 
 export APP_SETTINGS="testing"
 pip3 install -r requirements.txt
