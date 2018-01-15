@@ -1,2 +1,2 @@
-# ConcourseProject
-Testing CI and build configs with concourse
+# Concourse Project
+Testing CI and CD with Concourse

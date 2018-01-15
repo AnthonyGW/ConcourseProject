@@ -14,5 +14,4 @@ outputs:
 - name: cpbackend_test_result
 
 run:
-  path: cpbackend_github_repo/ci/test_script.sh
-
+  path: cpbackend_github_repo/src_backend/ci/Scripts/test_script.sh
