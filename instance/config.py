@@ -38,7 +38,7 @@ class TestingConfig(Config):
     POSTGRES = {
         'user': 'postgres',
         'pw': 'postgres',
-        'db': 'postgres',
+        'db': 'test_db',
         'host': 'localhost',
         'port': '5432',
     }
