@@ -4,6 +4,7 @@ set -o errexit
 set -o nounset
 
 service postgresql start
+creatuser -s -U root
 cd cpbackend_github_repo
 
 export APP_SETTINGS="testing"
