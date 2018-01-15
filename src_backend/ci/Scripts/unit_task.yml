@@ -8,10 +8,10 @@ image_resource:
     tag: 'latest'
 
 inputs:
-- name: cpbackend_github_repo
+- name: cp_github_repo
 
 outputs:
 - name: cpbackend_test_result
 
 run:
-  path: cpbackend_github_repo/src_backend/ci/Scripts/test_script.sh
+  path: cp_github_repo/src_backend/ci/Scripts/test_script.sh

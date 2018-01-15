@@ -1,0 +1,16 @@
+resources:
+- name: cp_github_repo
+  type: git
+  source:
+    uri: https://github.com/AnthonyGW/ConcourseProject.git
+    branch: master
+
+jobs:
+- name: cpbackend_ci_tests
+  serial: true
+  plan:
+  - aggregate:
+    - get: cp_github_repo
+      trigger: true
+  - task: run_tests
+    file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
