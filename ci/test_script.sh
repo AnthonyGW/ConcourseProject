@@ -5,7 +5,7 @@ set -o nounset
 
 service postgresql start
 
-alter user postgres password postgres
+psql | alter user postgres password postgres
 
 cd cpbackend_github_repo
 
