@@ -12,5 +12,13 @@ jobs:
   - aggregate:
     - get: cp_github_repo
       trigger: true
-  - task: run_tests
+  - task: run_backend_tests
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
+- name: cpfrontend_ci_tests
+  serial: true
+  plan:
+  - aggregate:
+    - get: cp_github_repo
+      trigger: true
+  - task: run_frontend_tests
+    file: cp_github_repo/src_frontend/ci/Scripts/unit_task.yml
