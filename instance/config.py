@@ -42,8 +42,9 @@ class TestingConfig(Config):
         'host': 'localhost',
         'port': '5432',
     }
-    SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
-    %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+    #SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
+    #%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+    SQLALCHEMY_DATABASE_URI = 'postgresql:///postgres'
     DEBUG = True
 
 class StagingConfig(Config):
