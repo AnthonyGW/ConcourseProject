@@ -7,6 +7,8 @@ service postgresql start
 
 cat cpbackend_github_repo/pg_hba > /etc/postgresql/9.5/main/pg_hba.conf
 
+cat /etc/postgresql/9.5/main/pg_hba.conf
+
 cd cpbackend_github_repo
 
 export APP_SETTINGS="testing"
