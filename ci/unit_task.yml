@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: cloud.docker.com/swarm/tonywaithaka/repository/docker/tonywaithaka/cptestenv
+    repository: tonywaithaka/cptestenv
     tag: 'latest'
 
 inputs:
