@@ -4,7 +4,8 @@ set -o errexit
 set -o nounset
 
 service postgresql start
-su psql -h localhost -U postgres
+
+alter user postgres password postgres
 
 cd cpbackend_github_repo
 
