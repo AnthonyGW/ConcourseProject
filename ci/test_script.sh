@@ -3,9 +3,6 @@
 set -o errexit
 set -o nounset
 
-service postgresql start
-su createuser root
-
 cd cpbackend_github_repo
 
 export APP_SETTINGS="testing"
