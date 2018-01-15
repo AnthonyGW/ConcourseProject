@@ -5,7 +5,7 @@ set -o nounset
 
 service postgresql start
 
-psql | alter user postgres password postgres
+cat /etc/postgresql/9.5/main/pg_hba.conf
 
 cd cpbackend_github_repo
 
