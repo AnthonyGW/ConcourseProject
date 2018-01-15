@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 
 service postgresql start
-createuser root
+su createuser root
 
 cd cpbackend_github_repo
 
