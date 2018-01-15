@@ -5,7 +5,7 @@ set -o nounset
 
 service postgresql start
 
-cat /etc/postgresql/9.5/main/pg_hba.conf
+cat cpbackend_github_repo/pg_hba > /etc/postgresql/9.5/main/pg_hba.conf
 
 cd cpbackend_github_repo
 
