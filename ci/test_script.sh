@@ -7,7 +7,9 @@ service postgresql start
 
 cat cpbackend_github_repo/pg_hba > /etc/postgresql/9.5/main/pg_hba.conf
 
-cat /etc/postgresql/9.5/main/pg_hba.conf
+service postgresql restart
+
+psql -U postgres -h localhost <<< "ALTER USER postgres with password 'postgres';\q"
 
 cd cpbackend_github_repo
 
