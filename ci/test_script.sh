@@ -4,7 +4,8 @@ set -o errexit
 set -o nounset
 
 service postgresql start
-createuser -s -U root
+psql -h localhost -U postgres
+
 cd cpbackend_github_repo
 
 export APP_SETTINGS="testing"
