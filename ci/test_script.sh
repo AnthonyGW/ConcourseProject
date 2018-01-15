@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 
 service postgresql start
-psql -h localhost -U postgres
+su psql -h localhost -U postgres
 
 cd cpbackend_github_repo
 
