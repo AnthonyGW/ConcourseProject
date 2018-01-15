@@ -14,3 +14,7 @@ outputs:
 
 run:
   path: cp_github_repo/src_frontend/ci/Scripts/test_script.sh
+  args:
+  - -exc
+    |
+    chmod +x cp_github_repo/src_frontend/ci/Scripts/test_script.sh
