@@ -3,6 +3,8 @@
 set -o errexit
 set -o nounset
 
+service postgresql start
+
 cd cpbackend_github_repo
 
 export APP_SETTINGS="testing"
