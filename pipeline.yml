@@ -8,6 +8,7 @@ resources:
 jobs:
 - name: cpbackend_ci_tests
   serial: true
+  serial_groups: [group-one]
   plan:
   - aggregate:
     - get: cp_github_repo
@@ -16,6 +17,7 @@ jobs:
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
 - name: cpfrontend_ci_tests
   serial: true
+  serial_groups: [group-one]
   plan:
   - aggregate:
     - get: cp_github_repo
