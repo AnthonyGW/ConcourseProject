@@ -4,11 +4,12 @@ resources:
   source: &repo_source
     uri: https://github.com/AnthonyGW/ConcourseProject.git
     branch: master
+
 - name: npm_repo_cache
   type: npm-cache
   source:
     <<: *repo_source
-    paths:
+    path:
     - src_frontend/package.json
 
 jobs:
