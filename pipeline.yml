@@ -1,6 +1,6 @@
 resource_types:
 
-  - name: node_modules-cache-resource-type
+  - name: npm-cache
     type: docker-image
     source:
       repository: ymedlop/npm-cache-resource
