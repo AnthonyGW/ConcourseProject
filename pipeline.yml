@@ -21,6 +21,6 @@ jobs:
   plan:
   - aggregate:
     - get: cp_github_repo
-      trigger: true
+      trigger: false
   - task: run_frontend_tests
     file: cp_github_repo/src_frontend/ci/Scripts/unit_task.yml
