@@ -1,9 +1,15 @@
 resources:
 - name: cp_github_repo
   type: git
-  source:
+  source: &repo_source
     uri: https://github.com/AnthonyGW/ConcourseProject.git
     branch: master
+- name: npm_repo_cache
+  type: npm-cache
+  source:
+    <<: *repo_source
+    paths:
+    - src_frontend/package.json
 
 jobs:
 - name: cpbackend_ci_tests
@@ -15,12 +21,23 @@ jobs:
       trigger: true
   - task: run_backend_tests
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
+
+- name: cache
+  plan:
+  - get: cp_github_repo
+    trigger: true
+  - get: npm_repo_cache
+
 - name: cpfrontend_ci_tests
   serial: true
-  serial_groups: [group-one]
+  serial_groups: [group-two]
   plan:
   - aggregate:
     - get: cp_github_repo
-      trigger: false
+      trigger: true
+      passed: [cache]
+    - get: npm_repo_cache
+      passed: [cache]
   - task: run_frontend_tests
     file: cp_github_repo/src_frontend/ci/Scripts/unit_task.yml
+

@@ -8,6 +8,8 @@ image_resource:
 
 inputs:
 - name: cp_github_repo
+- name: npm_repo_cache
+  path: /cache
 
 outputs:
 - name: cpfrontend_test_result
@@ -17,5 +19,6 @@ run:
   args:
   - -exc
   - |
+    mv cache/node_modules cp_github_repo/src_frontend
     chmod +x cp_github_repo/src_frontend/ci/Scripts/test_script.sh
     cp_github_repo/src_frontend/ci/Scripts/test_script.sh
