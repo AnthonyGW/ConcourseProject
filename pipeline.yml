@@ -17,7 +17,7 @@ resources:
   type: npm-cache
   source:
     <<: *repo_source
-    path:
+    paths:
     - src_frontend/package.json
 
 jobs:
