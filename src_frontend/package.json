@@ -30,7 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom --setupTestFrameworkScriptFile ./src/browsemocks.js",
     "eject": "react-scripts eject",
-    "cover": "npm test -- --coverage"
+    "cover": "npm test -- -u --coverage"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
