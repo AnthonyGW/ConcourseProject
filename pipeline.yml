@@ -17,8 +17,9 @@ resources:
   type: npm-cache
   source:
     <<: *repo_source
+    project-path: src_frontend/
     paths:
-    - src_frontend/package.json
+    - package.json
 
 jobs:
 - name: cpbackend_ci_tests
