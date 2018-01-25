@@ -23,9 +23,19 @@ resources:
 
 - name: cpbackend_build
   type: git
+  source:
+    uri: https://github.com/AnthonyGW/BackendBuild.git
+    branch: testing
+    private_key: |
+      ((private-repo-key))
 
 - name: cpfrontend_build
   type: git
+  source:
+    uri: https://github.com/AnthonyGW/FrontendBuild.git
+    branch: testing
+    private_key: |
+      ((private-repo-key))
 
 jobs:
 - name: cpbackend_ci_tests
