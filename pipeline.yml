@@ -34,7 +34,7 @@ jobs:
   plan:
   - aggregate:
     - get: cp_github_repo
-      trigger: false
+      trigger: true
   - task: run_backend_tests
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
   - put: cpbackend_build
@@ -46,6 +46,7 @@ jobs:
     - get: cp_github_repo
       trigger: true
       passed: [cpbackend_ci_tests]
+    - get: cpbackend_build
   - task: run_backend_integration_test
     config:
       platform: linux
@@ -61,6 +62,7 @@ jobs:
   plan:
   - get: cpbackend_build
     trigger: true
+    passed: [cpbackend_integration_test]
   - task: deploy_backend_to_testing_server
     config:
       platform: linux
@@ -99,6 +101,7 @@ jobs:
       passed: [cpfrontend_ci_tests]
     - get: npm_repo_cache
       passed: [cache]
+    - get: cpfrontend_build
   - task: run_frontend_integration_test
     config:
       platform: linux
@@ -114,6 +117,7 @@ jobs:
   plan:
   - get: cpfrontend_build
     trigger: true
+    passed: [cpfrontend_integration_test]
   - task: deploy_frontend_to_testing_server
     config:
       platform: linux
