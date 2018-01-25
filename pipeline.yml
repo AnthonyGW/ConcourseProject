@@ -11,7 +11,7 @@ resources:
   type: git
   source: &repo_source
     uri: https://github.com/AnthonyGW/ConcourseProject.git
-    branch: master
+    branch: testing
 
 - name: npm_repo_cache
   type: npm-cache
@@ -28,9 +28,45 @@ jobs:
   plan:
   - aggregate:
     - get: cp_github_repo
-      trigger: true
+      trigger: false
   - task: run_backend_tests
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
+  - put: cpbackend_build
+    resource: git
+    
+
+- name: cpbackend_integration_test
+  serial: true
+  plan:
+  - aggregate:
+    - get: cp_github_repo
+      trigger: true
+      passed: [cpbackend_ci_tests]
+  - task: run_backend_integration_test
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu}
+      run:
+        path: echo
+        args: ["Make a new task yml and execute bash script to run merge test"]
+
+- name: cpbackend_deploy_testing
+  serial: true
+  plan:
+  - get: cpbackend_build
+    trigger: true
+    passed: [cpbackend_integration_test]
+  - task: deploy_backend_to_testing_server
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu}
+      run:
+        path: echo
+        args: ["Execute script to remake the infrastructure and deploy the built code"]
 
 - name: cache
   plan:
@@ -50,4 +86,39 @@ jobs:
       passed: [cache]
   - task: run_frontend_tests
     file: cp_github_repo/src_frontend/ci/Scripts/unit_task.yml
+  - put: cpfrontend_build
+    resource: git
 
+- name: cpfrontend_integration_test
+  plan:
+  - aggregate:
+    - get: cp_github_repo
+      trigger: true
+      passed: [cpfrontend_ci_tests]
+    - get: npm-repo_cache
+      passed: [cache]
+  - task: run_frontend_integration_test
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu}
+      run:
+        path: echo
+        args: ["Make a new task yml and execute bash script to run merge test"]
+
+- name: cpfrontend_deploy_testing
+  serial: true
+  plan:
+  - get: cpfrontend_build
+    trigger: true
+    passed: [cpfrontend_integration_test]
+  - task: deploy_frontend_to_testing_server
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu}
+      run:
+        path: echo
+        args: ["Execute script to remake the infrastructure and deploy the built code"]
