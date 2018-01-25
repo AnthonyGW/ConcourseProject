@@ -48,6 +48,7 @@ jobs:
   - task: run_backend_tests
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
   - put: cpbackend_build
+    params: file: backend_build
 
 - name: cpbackend_integration_test
   serial: true

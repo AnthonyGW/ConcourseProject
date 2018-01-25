@@ -20,3 +20,5 @@ python3 manage.py db init
 python3 manage.py db migrate
 python3 manage.py db upgrade
 python3 manage.py test
+
+cp -a ../src_backend/. ../../backend_build
