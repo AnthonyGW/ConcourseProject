@@ -11,7 +11,7 @@ inputs:
 - name: cp_github_repo
 
 outputs:
-- name: cpbackend_test_result
+- name: cpbackend_build
 
 run:
   path: cp_github_repo/src_backend/ci/Scripts/test_script.sh
