@@ -21,6 +21,12 @@ resources:
     paths:
     - package.json
 
+- name: cpbackend_build
+  type: git
+
+- name: cpfrontend_build
+  type: git
+
 jobs:
 - name: cpbackend_ci_tests
   serial: true
@@ -32,8 +38,6 @@ jobs:
   - task: run_backend_tests
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
   - put: cpbackend_build
-    resource: git
-    
 
 - name: cpbackend_integration_test
   serial: true
@@ -57,7 +61,6 @@ jobs:
   plan:
   - get: cpbackend_build
     trigger: true
-    passed: [cpbackend_integration_test]
   - task: deploy_backend_to_testing_server
     config:
       platform: linux
@@ -87,7 +90,6 @@ jobs:
   - task: run_frontend_tests
     file: cp_github_repo/src_frontend/ci/Scripts/unit_task.yml
   - put: cpfrontend_build
-    resource: git
 
 - name: cpfrontend_integration_test
   plan:
@@ -95,7 +97,7 @@ jobs:
     - get: cp_github_repo
       trigger: true
       passed: [cpfrontend_ci_tests]
-    - get: npm-repo_cache
+    - get: npm_repo_cache
       passed: [cache]
   - task: run_frontend_integration_test
     config:
@@ -112,7 +114,6 @@ jobs:
   plan:
   - get: cpfrontend_build
     trigger: true
-    passed: [cpfrontend_integration_test]
   - task: deploy_frontend_to_testing_server
     config:
       platform: linux
