@@ -22,3 +22,5 @@ python3 manage.py db upgrade
 python3 manage.py test
 
 cp -a ../src_backend/. ../../backend_build
+cd ../../backend_build
+git init
