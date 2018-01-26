@@ -23,4 +23,5 @@ python3 manage.py test
 
 cp -a ../src_backend/. ../../backend_build
 cd ../../backend_build
+apt-get install -y git
 git init
