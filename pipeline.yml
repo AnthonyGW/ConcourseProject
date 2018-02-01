@@ -1,10 +1,22 @@
-resource_types:
+groups:
+- name: ci_tasks
+  jobs:
+  - cpbackend_ci_tests
+  - cpbackend_integration_test
+  - cache
+  - cpfrontend_ci_tests
+  - cpfrontend_integration_test
+- name: cd_tasks
+  jobs:
+  - cpbackend_deploy_testing
+  - cpfrontend_deploy_testing
 
+resource_types:
   - name: npm-cache
     type: docker-image
-    source:
-      repository: ymedlop/npm-cache-resource
-      tag: latest
+    source: 
+      repository: devdavid/npm-cache-resource
+      tag: "latest"
 
 resources:
 - name: cp_github_repo
@@ -13,7 +25,7 @@ resources:
     uri: https://github.com/AnthonyGW/ConcourseProject.git
     branch: testing
 
-- name: npm_repo_cache
+- name: npm-repo-cache
   type: npm-cache
   source:
     <<: *repo_source
@@ -40,24 +52,21 @@ resources:
 jobs:
 - name: cpbackend_ci_tests
   serial: true
-  serial_groups: [group-one]
+  serial_groups: [ci-one]
   plan:
   - aggregate:
     - get: cp_github_repo
       trigger: true
   - task: run_backend_tests
     file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
-  - put: cpbackend_build
-    params: file: backend_build
 
 - name: cpbackend_integration_test
   serial: true
+  serial_groups: [ci-one]
   plan:
   - aggregate:
     - get: cp_github_repo
       trigger: true
-      passed: [cpbackend_ci_tests]
-    - get: cpbackend_build
   - task: run_backend_integration_test
     config:
       platform: linux
@@ -70,10 +79,10 @@ jobs:
 
 - name: cpbackend_deploy_testing
   serial: true
+  serial_groups: [ci-one]
   plan:
   - get: cpbackend_build
     trigger: true
-    passed: [cpbackend_integration_test]
   - task: deploy_backend_to_testing_server
     config:
       platform: linux
@@ -83,22 +92,23 @@ jobs:
       run:
         path: echo
         args: ["Execute script to remake the infrastructure and deploy the built code"]
+    
 
 - name: cache
+  serial: true
   plan:
   - get: cp_github_repo
     trigger: true
-  - get: npm_repo_cache
+  - get: npm-repo-cache
 
 - name: cpfrontend_ci_tests
   serial: true
-  serial_groups: [group-two]
   plan:
   - aggregate:
     - get: cp_github_repo
       trigger: true
       passed: [cache]
-    - get: npm_repo_cache
+    - get: npm-repo-cache
       passed: [cache]
   - task: run_frontend_tests
     file: cp_github_repo/src_frontend/ci/Scripts/unit_task.yml
@@ -110,7 +120,7 @@ jobs:
     - get: cp_github_repo
       trigger: true
       passed: [cpfrontend_ci_tests]
-    - get: npm_repo_cache
+    - get: npm-repo-cache
       passed: [cache]
     - get: cpfrontend_build
   - task: run_frontend_integration_test
