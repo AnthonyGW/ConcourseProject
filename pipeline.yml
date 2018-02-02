@@ -1,10 +1,11 @@
 groups:
 - name: ci_tasks
   jobs:
-  - cpbackend_ci_tests
+  - cpbackend_unit_tests
   - cpbackend_integration_test
+  - create_backendbuild
   - cache
-  - cpfrontend_ci_tests
+  - cpfrontend_unit_tests
   - cpfrontend_integration_test
 - name: cd_tasks
   jobs:
@@ -12,11 +13,11 @@ groups:
   - cpfrontend_deploy_testing
 
 resource_types:
-  - name: npm-cache
-    type: docker-image
-    source: 
-      repository: devdavid/npm-cache-resource
-      tag: "latest"
+- name: npm-cache
+  type: docker-image
+  source: 
+    repository: ymedlop/npm-cache-resource
+    tag: "latest"
 
 resources:
 - name: cp_github_repo
@@ -29,7 +30,7 @@ resources:
   type: npm-cache
   source:
     <<: *repo_source
-    project-path: src_frontend/
+    project-path: src_frontend
     paths:
     - package.json
 
@@ -50,7 +51,7 @@ resources:
       ((private-repo-key))
 
 jobs:
-- name: cpbackend_ci_tests
+- name: cpbackend_unit_tests
   serial: true
   serial_groups: [ci-one]
   plan:
@@ -77,6 +78,24 @@ jobs:
         path: echo
         args: ["Make a new task yml and execute bash script to run merge test"]
 
+- name: create_backendbuild
+  plan:
+  - get: cpbackend_build
+    trigger: false
+  - get: cp_github_repo
+    trigger: true
+    passed: [cpbackend_integration_test]
+  - task: make_new_backend_build
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu}
+      run:
+        path: echo
+        args: ["Execute script to make a build version from source code"]
+  - put: cpbackend_build
+
 - name: cpbackend_deploy_testing
   serial: true
   serial_groups: [ci-one]
@@ -92,16 +111,14 @@ jobs:
       run:
         path: echo
         args: ["Execute script to remake the infrastructure and deploy the built code"]
-    
 
 - name: cache
-  serial: true
   plan:
   - get: cp_github_repo
     trigger: true
   - get: npm-repo-cache
 
-- name: cpfrontend_ci_tests
+- name: cpfrontend_unit_tests
   serial: true
   plan:
   - aggregate:
@@ -119,10 +136,11 @@ jobs:
   - aggregate:
     - get: cp_github_repo
       trigger: true
-      passed: [cpfrontend_ci_tests]
+      passed: [cpfrontend_unit_tests]
     - get: npm-repo-cache
-      passed: [cache]
+      passed: [cpfrontend_unit_tests]
     - get: cpfrontend_build
+      passed: [cpfrontend_unit_tests]
   - task: run_frontend_integration_test
     config:
       platform: linux
