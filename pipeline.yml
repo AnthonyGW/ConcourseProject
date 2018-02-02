@@ -30,7 +30,7 @@ resources:
   type: npm-cache
   source:
     <<: *repo_source
-    project-path: src_frontend
+    project-path: src_frontend/
     paths:
     - package.json
 
