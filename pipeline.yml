@@ -37,7 +37,7 @@ resources:
 - name: cpbackend_build
   type: git
   source:
-    uri: https://github.com/AnthonyGW/BackendBuild.git
+    uri: git@github.com:AnthonyGW/BackendBuild.git
     branch: testing
     private_key: |
       ((private-repo-key))
@@ -77,24 +77,75 @@ jobs:
       run:
         path: echo
         args: ["Make a new task yml and execute bash script to run merge test"]
+  # - task: make_build
+  #   config:
+  #     platform: linux
+  #     image_resource:
+  #       type: docker-image
+  #       source: {repository: ubuntu}
+  #     inputs:
+  #     - name: cp_github_repo
+  #     outputs:
+  #     - name: cpbackend_newbuild
+  #     run:
+  #       path: sh
+  #       args:
+  #       - -exc
+  #       - |
+  #         cp cp_github_repo/src_backend cpbackend_newbuild
+  # - put: cpbackend_newbuild
+  #   resource: git-resource
+
 
 - name: create_backendbuild
   plan:
   - get: cpbackend_build
-    trigger: false
   - get: cp_github_repo
     trigger: true
     passed: [cpbackend_integration_test]
-  - task: make_new_backend_build
+  - task: make_build
     config:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: ubuntu}
+        source: 
+          repository: tonywaithaka/python_buildenv
+          tag: 'latest'
+      inputs:
+      - name: cp_github_repo
+      - name: cpbackend_build
+      outputs:
+      - name: cpbackend_newbuild
       run:
-        path: echo
-        args: ["Execute script to make a build version from source code"]
+        path: sh
+        args:
+        - -exc
+        - |
+          echo "Execute script to make a build version from source code"
+          cp -af cp_github_repo/src_backend/. cpbackend_build
+          cp -a cpbackend_build/. cpbackend_newbuild
+          ls -a cpbackend_newbuild
+          # git init
+          cd cpbackend_newbuild
+          git add .
+          git config user.email "concourse@ci"
+          git config user.name "ConcourseTesting"
+          git commit -m "New build $(date)"
   - put: cpbackend_build
+    params:
+      repository: cpbackend_newbuild
+  # - task: make_new_backend_build
+  #   config:
+  #     platform: linux
+  #     image_resource:
+  #       type: docker-image
+  #       source: {repository: ubuntu}
+  #     run:
+  #       path: echo
+  #       args: ["Execute script to make a build version from source code"]
+  # - put: cpbackend_build
+  #   params:
+  #     file: cpbackend_newbuild
 
 - name: cpbackend_deploy_testing
   serial: true
