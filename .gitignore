@@ -100,4 +100,4 @@ ENV/
 .mypy_cache/
 
 .DS_Store
-*/node_modules/*
+src_frontend/node_modules
