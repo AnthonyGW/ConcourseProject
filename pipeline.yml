@@ -26,11 +26,17 @@ resources:
     uri: https://github.com/AnthonyGW/ConcourseProject.git
     branch: testing
 
+- name: backend_src
+  type: git
+  source:
+    <<: *repo_source
+    project-path: src_backend/
+
 - name: npm-repo-cache
   type: npm-cache
   source:
     <<: *repo_source
-    project-path: /src_frontend/
+    project-path: src_frontend/
     paths:
     - package.json
 
@@ -56,17 +62,17 @@ jobs:
   serial_groups: [ci-one]
   plan:
   - aggregate:
-    - get: cp_github_repo
+    - get: backend_src
       trigger: true
   - task: run_backend_tests
-    file: cp_github_repo/src_backend/ci/Scripts/unit_task.yml
+    file: backend_src/src_backend/ci/Scripts/unit_task.yml
 
 - name: cpbackend_integration_test
   serial: true
   serial_groups: [ci-one]
   plan:
   - aggregate:
-    - get: cp_github_repo
+    - get: backend_src
       trigger: true
   - task: run_backend_integration_test
     config:
@@ -100,7 +106,7 @@ jobs:
 - name: create_backendbuild
   plan:
   - get: cpbackend_build
-  - get: cp_github_repo
+  - get: backend_src
     trigger: true
     passed: [cpbackend_integration_test]
   - task: make_build

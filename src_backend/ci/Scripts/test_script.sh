@@ -5,13 +5,13 @@ set -o nounset
 
 service postgresql start
 
-cat cp_github_repo/src_backend/ci/Scripts/pg_hba > /etc/postgresql/9.5/main/pg_hba.conf
+cat backend_src/src_backend/ci/Scripts/pg_hba > /etc/postgresql/9.5/main/pg_hba.conf
 
 service postgresql restart
 
 psql -U postgres -h localhost <<< "ALTER USER postgres with password 'postgres';CREATE DATABASE test_db;\q"
 
-cd cp_github_repo/src_backend
+cd backend_src/src_backend
 
 export APP_SETTINGS="testing"
 pip3 install -r requirements.txt
